@@ -7,12 +7,34 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.list_ratings
     @sortby = params[:sort]
-    if @sortby != nil
-      @movies = Movie.order(@sortby)
+    
+    if params[:ratings] != nil
+      @chk_ratings = params[:ratings].keys
     else
-      @movies = Movie.all
+      @chk_ratings = @all_ratings
     end
+    
+    # if @chk_ratings == nil
+    # if @sortby != nil
+      # @movies = Movie.order(@sortby)
+    # else
+      # @movies = Movie.all
+    # end
+    # else
+    
+    @movies = Movie.find(:all, :conditions => { :rating => @chk_ratings }, :order => @sortby)
+    
+    # if chk_ratings != nil && @sortby != nil
+      # @movies = Movie
+    # elsif chk_ratings == nil && @sortby != nil
+      # @movies = Movie.order(@sortby)
+    # elsif @chk_ratings != nil && @sortby == nil
+      # @movies = Movie.where(rating = ?, chk_ratings)
+    # else
+      # @movies = Movie.all
+    # end
   end
 
   def new
