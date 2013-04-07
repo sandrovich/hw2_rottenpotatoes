@@ -12,10 +12,11 @@
 %table#movies
   %thead
     %tr
-      %th{:class=>('title' == @sortby)?'hilite':'title_header'}= link_to "Movie Title", movies_path(:sort => "title"), id: "title_header"
+      %th{:class=>('title' == @sortby)?'hilite':'title_header'}
+        = link_to "Movie Title", movies_path(:sort => "title", :ratings => Hash[@chk_ratings.map { |r| [r, 1] }]), id: "title_header"
       %th Rating
       %th{:class=>('release_date' == @sortby)?'hilite':'release_date_header'}
-        = link_to "Release Date", movies_path(:sort => "release_date"), id: "release_date_header"
+        = link_to "Release Date", movies_path(:sort => "release_date", :ratings => Hash[@chk_ratings.map { |r| [r, 1] }]), id: "release_date_header"
       %th More Info
   %tbody
     - @movies.each do |movie|
