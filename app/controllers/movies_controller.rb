@@ -8,12 +8,26 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.list_ratings
-    @sortby = params[:sort]
+    @chk_ratings = @all_ratings
     
-    if params[:ratings] != nil
-      @chk_ratings = params[:ratings].keys
-    else
-      @chk_ratings = @all_ratings
+    if !params[:ratings].nil?
+      if !params[:ratings].nil?
+        @chk_ratings = params[:ratings].keys
+        session.delete(:ratings)
+        session[:rating] = params[:ratings]
+      end
+
+      if !params[:sort].nil?
+        @sortby = params[:sort]
+        session.delete(:sort)
+        session[:sort] = params[:sort]
+      end
+    elsif !session[:rating].nil? || !session[:sort].nil?
+        params[:rating] = session[:rating]
+        params[:sort] = session[:sort]
+        session.clear
+        redirect_to movies_path(:ratings => params[:rating], :sort => params[:sort])
+
     end
     
     @movies = Movie.find(:all, :conditions => { :rating => @chk_ratings }, :order => @sortby)
